@@ -1,0 +1,177 @@
+<html>
+    <head>
+        <!-- Includes the p5.collide2D addon library -->
+        <script defer src="https://unpkg.com/p5.collide2d"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js" integrity="sha512-uaz5GpnQoE6t5echKlX8P52czvsIGgLPcvlzfvRubLZ1Hp8JemUDnbUiAahbVtPb+jUVrNETuXvAhDDF/N3M4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src = " https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.js"></script>
+    </head>
+    <body>
+
+        <script>
+             let w = window.innerWidth
+            let h = window.innerHeight
+            let player //delcare an unknown variable
+            let hit = false
+            let baseHealth = 100
+
+            function preload(){
+                wizardRight =  loadImage('2pixil-frame-0  wizard-Right(2).png')
+                wizardLeft = loadImage('3pixil-frame-0 wizard-Left(3).png')
+                wizardForward = loadImage('4pixil-frame-0 wizard-Forward (4).png')
+                wizardBack = loadImage('5pixil-frame-0 wizard-Back(5).png')
+                cauldronBase = loadImage('6pixil-frame-0 base-caludron (2).png')
+
+            }
+
+            function setup(){
+                createCanvas(w,h)
+                player = new jumper() //defining jumper as new object
+                enemy = new obsticle()
+            }
+            //create new object
+            function jumper() {
+                this.x = w/2
+                this.y = 0
+                //create opposing force
+                this.lift = -12
+                //create velocity
+                this.velocity = 0
+
+                //function to set up initial jumper
+                this.show = function() {
+                    //Here is where we determin what it will look like
+                    fill("rgba(255,0,255,0.25)")
+                    let cx = w/2
+                    let cy = h/2
+                    circle(cx,cy,50)
+                    ellipseMode(CENTER)
+                    fill("rgba(0,0,0,0.5)")
+                    let rx = 300
+                    let ry = 150
+                    let rw = 950
+                    let rh = 450
+                    rect(rx,ry,rw,rh)
+                    hit = collideRectCircle(rx, ry, rw, rh, cx,cy,50)
+                    if (keyIsDown(87,83,65,68)){
+                        cx = this.x
+                        cy = this.y
+                    }
+                }
+                this.base = function(){
+                    image(cauldronBase,w/2,h/2, 100, 100)
+                    imageMode(CENTER)
+                }
+                this.forward = function(){
+                    image(wizardForward,this.x,this.y,130,135)
+                    imageMode(CENTER)
+                    }
+                    
+                this.up = function() {
+                    //add a keypressed
+                    if (keyIsDown(87)){
+                        let cx = this.x
+                        let cy = this.y
+                        this.y += this.lift
+                        image(wizardBack,cx,cy,130,135)
+                        
+                    }
+                    else{
+                        fill("rgba(0,0,0,0)")
+                    }
+                }
+                this.down = function() {
+                    //add a keypressed
+                    if (keyIsDown(83)){
+                        let cx = this.x
+                        let cy = this.y
+                        this.y -= this.lift
+                    }
+                }
+                this.left =function(){
+                    if (keyIsDown(65)){
+                        let cx = this.x
+                        let cy = this.y
+                        this.x -= 7
+                        image(wizardLeft,cx, cy,150,150)
+                        imageMode(CENTER)
+                    }
+                    else{
+                        fill("rgba(0,0,0,0)")
+                    }
+                }
+                this.right = function(){
+                    if (keyIsDown(68)){
+                        let cx = this.x
+                        let cy = this.y
+                        this.x += 7
+                        image(wizardRight, cx, cy,150,150)
+                        imageMode(CENTER)
+                        fill("rgba(0,0,0,0)")
+                    }
+                }
+                //function to loop on repeat within the draw function
+                this.update = function() {
+                    //what direction am i traveling
+                    this.y += this.velocity
+                    this.x += this.velocity
+                    if (hit === true ){
+                        this.velocity *=2
+                        this.lift = -7.5
+                    }
+                    if(this.x >= 300){
+                        this.velocity = 0
+                        this.lift = 0
+                    }
+                    else{
+                        this.lift = -12
+                        this.velocity = 0
+                    }
+                }
+            }
+            function obsticle(){
+                this.x = w/2
+                this.y = 0
+                velocity = 0
+                lift = -11 
+                this.appear = function(){
+                    if (hit === true){
+                    frameRate(1)
+                    cx = random(0,w)
+                    cy = random(0,h)
+                    fill("rgba(255,0,0,0.75)")
+                    circle(cx,cy,50)
+                    collideCircleCircle(w/2,h/2,50,cx,cy,50)
+                    if (hit === true) {
+                        baseHealth - 1
+
+                    }
+                    }
+                
+                }
+
+            }
+
+            function draw() {
+                clear()
+                player.show()
+                player.base()
+                player.update()
+                player.forward()
+                player.up()
+                player.down()
+                player.left()
+                player.right()
+                enemy.appear()
+            }
+        </script>
+        <style>
+            body{
+                background-image:url("https://t3.ftcdn.net/jpg/06/04/22/36/360_F_604223671_RS327qPmIEjzubYMQz7oMVpGw7ROCo2S.jpg");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+        </style>
+
+    </body>
+</html>
+            
