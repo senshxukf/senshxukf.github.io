@@ -1,0 +1,134 @@
+<html>
+    <head>
+        <title>Starting Screen</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Dungeon RPG Game !!!</h1>
+        <button onclick = "Start_Game()" id = "Starting_Button">Start Game</button>
+        <button onclick = "Endless_Mode()" id = "Endless_Mode">Endless Mode</button>
+        <button onclick = "Settings_and_Options()" id = "Settings_And_Options">Settings and Options</button>
+        <div class ="lil_man"></div>
+
+        <style>
+                        
+            body{
+                background-color: red;
+                background-image:url("https://www.shutterstock.com/image-vector/dungeon-long-medieval-castle-corridor-600nw-2126199458.jpg");
+                background-repeat: no-repeat;
+                background-size: cover;
+                
+                
+            }
+
+            h1{
+                display: flex;
+                position: relative;
+                font-family: 'Honk';
+                font-size: 80;
+                margin: auto;
+                align-items:center;
+                justify-content: center;
+                flex-direction:column-reverse;
+                height: 500;
+                width: 750;
+                z-index: 0.5;
+                position: center;
+                top:-10%;
+               
+
+            }
+
+            #Starting_Button{
+                top:-25%;
+                position: relative;
+                display:flex;
+                flex-direction: column-reverse;
+                margin: auto;
+                justify-content: center;
+                align-items:center;
+                font-family:'Honk';
+                height: 65px;
+                width: 480px;
+                font-size: 50px; 
+                background-color: transparent;
+                box-shadow: 9px;
+                 
+            }
+            #Starting-Button:hover{
+                background-color: transparent;
+            }
+            #Starting-Button:active{
+                background-color: transparent;
+                box-shadow: 5px;
+                transform:translateY(4px);
+            }
+
+            #Endless_Mode{
+                top:-20%;
+                position: relative;
+                display:flex;
+                flex-direction: column-reverse;
+                margin: auto;
+                justify-content: center;
+                align-items:center;
+                font-family:'Honk';
+                height: 65px;
+                width: 480px;
+                font-size: 50px; 
+                background-color: transparent;
+                box-shadow: 9px;
+            
+            }
+
+            #Settings_And_Options{
+                top:-15%;
+                position: relative;
+                display:flex;
+                flex-direction: column-reverse;
+                margin: auto;
+                justify-content: center;
+                align-items:center;
+                font-family:'Honk';
+                height: 65px;
+                width: 480px;
+                font-size: 50px; 
+                background-color: transparent;
+                box-shadow: 9px;
+
+            }
+
+            #lil_man {
+                height: 100px;
+                width: 40px;
+                background-image: url("");
+                background-color: red;
+                position: absolute;
+                animation: linear;
+                animation-duration: 10s;
+                animation-name: 'run';
+                top: 0%;
+                left: 0%;
+                
+            } 
+
+        </style>
+        <script>
+            function Start_Game(){
+                location.href = 'main game.html'; 
+            }
+            function Endless_Mode(){
+                location.href = "Endless_Mode.html"
+            }
+            function Settings_And_Options(){
+                location.href = 'Options And Settings.html';
+            }
+
+
+            
+
+        </script>
+    </body>
+</html>
