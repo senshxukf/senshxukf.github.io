@@ -6,16 +6,20 @@
         <script src = " https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.js"></script>
     </head>
     <body>
+        <p id = "test_for_collision"> Test For Collision</p> 
         <script>
-             let w = window.innerWidth
+            let w = window.innerWidth
             let h = window.innerHeight
             let player //delcare an unknown variable
             let detect = false
             let hit = false
             let baseHealth = 100
             let base_damage = false
+            let speed = 5
+            let enemy_circles = []
 
-            function preload(){
+
+            function preload(){ //Allows visual graphics to be seen on character
                 wizardRight =  loadImage('2pixil-frame-0  wizard-Right(2).png')
                 wizardLeft = loadImage('3pixil-frame-0 wizard-Left(3).png')
                 wizardForward = loadImage('4pixil-frame-0 wizard-Forward (4).png')
@@ -27,7 +31,8 @@
             function setup(){
                 createCanvas(w,h)
                 player = new jumper() //defining jumper as new object
-                enemy = new obsticle()
+                window.ctx = canvas.getContext("2d")
+
             }
             //create new object
             function jumper() {
@@ -56,14 +61,7 @@
                         cy = this.y
                     }
                 }
-                this.barrier = function(){
-                    fill(255,0,0)
-                    rect(0,0,w,10)
-                    rect(0,0,10,h)
-                    rect(0,605,w,10)
-                    rect(1500,0,10,h)                   
-                }
-                this.hitbox = function(){
+                this.hitbox = function(){// Used as a hitbox for the player
                     fill(0,0,255)
                     circle(this.x,this.y,75)
                     ellipseMode(CENTER)
@@ -71,26 +69,18 @@
                     collideRectCircle(0,0,10,h,this.x,this.y,75)
                     collideRectCircle(0,605,w,10,this.x,this.y,75)
                     collideRectCircle(0,1500,w,10,this.x,this.y,75)
-                    if(detect === true){
-                        this.y -= this.velocity
-                        this.x -= this.velocity
-                        this.velocity = 0
-                        this.lift = 0
-                    }
-                    
-                    
                 }
 
-                this.base = function(){
+                this.base = function(){ //Picture for he cauldron in the middle of the screen
                     image(cauldronBase,w/2,h/2, 100, 100)
                     imageMode(CENTER)
                 }
-                this.forward = function(){
+                this.forward = function(){  //allows the player character to be visible while moving foraward
                     image(wizardForward,this.x,this.y,130,135)
                     imageMode(CENTER)
                     }
                     
-                this.up = function() {
+                this.up = function() {//allows the player to be visible while moving up
                     //add a keypressed
                     if (keyIsDown(87)){
                         let cx = this.x
@@ -103,7 +93,7 @@
                         fill("rgba(0,0,0,0)")
                     }
                 }
-                this.down = function() {
+                this.down = function() { //allows for the player to be visible for moving down
                     //add a keypressed
                     if (keyIsDown(83)){
                         let cx = this.x
@@ -111,7 +101,7 @@
                         this.y -= this.lift
                     }
                 }
-                this.left =function(){
+                this.left = function(){ //allows for the player to be seen while moving to the left 
                     if (keyIsDown(65)){
                         let cx = this.x
                         let cy = this.y
@@ -123,7 +113,7 @@
                         fill("rgba(0,0,0,0)")
                     }
                 }
-                this.right = function(){
+                this.right = function(){ // allows for the player to be able to be seen moving to the right
                     if (keyIsDown(68)){
                         let cx = this.x
                         let cy = this.y
@@ -133,6 +123,23 @@
                         fill("rgba(0,0,0,0)")
                     }
                 }
+                    
+                    this.create_obsticle = function(){
+                    //create the constant size of the circles
+                    let circle_radius = 50
+
+                    //create enemy circle's random position on the game screen
+                    let cx = Math.random() * (canvas.width - 2 * circle_radius) + circle_radius // Random x-coordinate
+                    let cy = Math.random() * (canvas.height - 2 * circle_radius) + circle_radius // Random y-coordinate
+
+                    //create a random speed for the circles to reach the center
+                    let speed = Math.random() * 2 + 1; // Random speed between 1 and 3
+
+                    //add circles being created to container using the .push method (enemy_circles)
+                    //this will be used to constanly spawn in new circles after some of them are defeated
+                    enemy_circles.push({cx,cy,circle_radius,speed})
+                    }
+                
                 //function to loop on repeat within the draw function
                 this.update = function() {
                     //what direction am i traveling
@@ -142,38 +149,30 @@
                         this.velocity *=2
                         this.lift = -7.5
                     }
-                    else{
+                    else{ //returns speed of character to normal
                         this.lift = -12
                         this.velocity = 0
                     }
+                    //calculate the center of the video game screen (used to find the cauldron base)
+                    //I used the forEach method because its the easiest way for me to understand
+                    enemy_circles.forEach(circle =>{
+                        //calculate the size of the canvas divided by 2 (equals the center)
+                        let dx = canvas.width / 2 - circle.x
+                        let dy = canvas.height / 2 - circle.y
+
+                        //this equation allows the circle's path to be charted towards the center using (Math.sqrt,) which is short for square root.
+                        let distanceToCenter = Math.sqrt(dx * dx + dy * dy)
+
+                        //this part allows for the enemy circles to move towards the center at a random speed given
+                        circle.x += dx / distanceToCenter * circle.speed
+                        circle.y += dy / distanceToCenter * circle.speed
+                        })
 
                 }
             }
-            function obsticle(){
-                this.x = w/2
-                this.y = 0
-                velocity = 0
-                lift = -11 
-                this.appear = function(){
-                    cx = mouseX
-                    cy = mouseY
-                    fill("rgba(255,0,0,0.75)")
-                    circle(cx,cy,50)
-                    base_damage = collideCircleCircle(w/2,h/2,50,cx,cy,50)
-                    if (base_damage === true) {
-                        baseHealth -= 1
-                        document.getElementById('base_health').innerHTML = baseHealth
-                        cx = random(0,w)
-                        cy = random(0,h)
-                    }
-                
-                }
 
-            }
-
-            function draw() {
+            function draw() {// allows for functions and images too be 
                 clear()
-                player.barrier()
                 player.hitbox()
                 player.show()
                 player.base()
@@ -183,8 +182,34 @@
                 player.down()
                 player.left()
                 player.right()
-                enemy.appear()
+                player.create_obsticle()
+                enemy_circles.forEach(circle => {
+                    //the ctx is short for context, in which ctx is the indicatior if I am working with the lifecycle methods
+                    //lifecycle methods have three phases that include mounting, updating, and unmounting
+                    //I found this method after watching tutorial videos on how to create js games that have characters that move to a specific point
+                    ctx.beginPath()
+
+                    ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2)
+
+                    ctx.fill()
+
+                    ctx.closePath()
+                    //the closePath() method from what i researched attempts to add a straight line from the current x and y position to the other point you want the 
+                    //circle to end up
+                    //another thing I learned that the closePath() method does is that it creates a line that isn't visible on the canvas, but its there
+
+                    })
             }
+
+            //create the amount of time it takes to spawn the circles
+            setInterval(player.create_obsticle,2000)//counts in miliseconds with this method
+                    
+            //start the enemy circle loop
+            while (true){
+                player.create_obsticle()
+            }
+
+
         </script>
          <h1 id = "base_health"></h1>
         <style>
