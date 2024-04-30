@@ -1,6 +1,9 @@
 <html>
     <head>
         <title>Starting Screen</title>
+        <script defer src="https://unpkg.com/p5.collide2d"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js" integrity="sha512-uaz5GpnQoE6t5echKlX8P52czvsIGgLPcvlzfvRubLZ1Hp8JemUDnbUiAahbVtPb+jUVrNETuXvAhDDF/N3M4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+       <script src = " https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.js"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
@@ -8,17 +11,16 @@
     <body>
         <h1>Cauldron Defense !!!</h1>
         <button onclick = "Start_Game()" id = "Starting_Button">Start Game</button>
-        <button onclick = "Endless_Mode()" id = "Endless_Mode">Endless Mode</button>
-        <button onclick = "Settings_and_Options()" id = "Settings_And_Options">Settings and Options</button>
-        <div class ="lil_man"></div>
+        <button onclick = "Options_and_Controls()" id = "Settings_And_Options">story/tutorial description</button>
+        <p>press E for theme music</p>
 
         <style>
                         
             body{
-                background-color: red;
-                background-image:url("https://www.shutterstock.com/image-vector/dungeon-long-medieval-castle-corridor-600nw-2126199458.jpg");
+                background-color: black; 
                 background-repeat: no-repeat;
-                background-size: cover;
+                background-size:cover;
+
                 
                 
             }
@@ -37,8 +39,12 @@
                 z-index: 0.5;
                 position: center;
                 top:-10%;
-               
-
+            }
+            p{
+                display:flex;
+                bottom: 100%;
+                left: 100%;
+                font-family: Honk;
             }
 
             #Starting_Button{
@@ -66,7 +72,9 @@
                 transform:translateY(4px);
             }
 
-            #Endless_Mode{
+
+
+            #Settings_And_Options{
                 top:-20%;
                 position: relative;
                 display:flex;
@@ -77,58 +85,65 @@
                 font-family:'Honk';
                 height: 65px;
                 width: 480px;
-                font-size: 50px; 
-                background-color: transparent;
-                box-shadow: 9px;
-            
-            }
-
-            #Settings_And_Options{
-                top:-15%;
-                position: relative;
-                display:flex;
-                flex-direction: column-reverse;
-                margin: auto;
-                justify-content: center;
-                align-items:center;
-                font-family:'Honk';
-                height: 65px;
-                width: 480px;
-                font-size: 50px; 
+                font-size: 35px; 
                 background-color: transparent;
                 box-shadow: 9px;
 
             }
-
-            #lil_man {
-                height: 100px;
-                width: 40px;
-                background-image: url("");
-                background-color: red;
-                position: absolute;
-                animation: linear;
-                animation-duration: 10s;
-                animation-name: 'run';
-                top: 0%;
-                left: 0%;
-                
-            } 
+ 
 
         </style>
+
         <script>
-            function Start_Game(){
-                location.href = 'main game.html'; 
-            }
-            function Endless_Mode(){
-                location.href = "Endless_Mode.html"
-            }
-            function Settings_And_Options(){
-                location.href = 'Options And Settings.html';
-            }
+            let music = false
+            let w = window.innerWidth
+           let h = window.innerHeight
+           //preload assets
+           //create variable for sound
+           let backgroundMusic
 
+           function preload(){
+               //assign sound
+               backgroundMusic = loadSound('Looping Ascent - Joel Cummins.mp3')
+               startButton = loadSound('Body Punch Series-[AudioTrimmer.com].mp3')
+           }
+           
+           function setup(){
+               createCanvas(w,h)
+           }
+           function draw() {
 
-            
+               //set initial volume. variable.setVolume(0.0 to 1.0)
+               backgroundMusic.setVolume(0.3)
+               startButton.setVolume(0.3)
+           }
+            //play a sound when spacebar is pressed
+           function keyPressed (){
+               if (keyCode === 69 && !music){
+                   //vatiable name.play
+                   music = true 
+                   backgroundMusic.play()
+               
+               }
 
-        </script>
+               else if (keyCode === 69 && music){
+                clear()
+                music = false
+                backgroundMusic.stop()
+               }             
+               
+           }
+
+           function Start_Game(){
+               location.href = 'main game.html'; 
+           }
+
+           function Options_and_Controls(){
+               location.href = 'Options And Settings.html';
+           }
+           
+       </script>
+       
+       
     </body>
 </html>
