@@ -1,13 +1,76 @@
 <html>
     <head>
-        <p>Options and Settings page</p>
+        <title>Options and Controls</title>
+        <script defer src="https://unpkg.com/p5.collide2d"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js" integrity="sha512-uaz5GpnQoE6t5echKlX8P52czvsIGgLPcvlzfvRubLZ1Hp8JemUDnbUiAahbVtPb+jUVrNETuXvAhDDF/N3M4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+       <script src = " https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">  
     </head>
     <body>
+        <div id = "example_box">
+            <p> This is the general controls of the game.
+                The movement consists of using WSAD, with the shooting button being F.
+                the way you aim is by using the mouse button for your wizard to target his shots.
+                The enemies will continuosly spawn around the cauldron getting increasingly faster,
+                until your health reaches zero.<br></br>
+                Story: You, a young wizard, has been given the responsibility to guard the sacred cauldron of the grand wizards.
+                Just as you are given these instructions, enemies start to swarm the cauldron, hoping to destroy it so no one in your
+                race has access to your power again. Armed with a simple fire spell, it's your job to defend the cauldron for as long as possible,
+                until you are ultimately overrun and forced to watch as the cauldron gets destroyed. 
+
+            </p>
+        </div>
+
+        <button onclick = "Back()" id = "Back_Button">Back</button>
+
         <script>
+            function Back(){
+                location.href = "index.html";
+            }
 
         </script>
         <style>
             
+            #example_box{
+                display:flex;
+                z-index: 0.2;
+                color:green;
+                display: flex;
+                font-size: 25;
+                margin: auto;
+                font-family: Honk;
+                align-items:center;
+                justify-content: center;
+                flex-direction:column-reverse;
+                height: 500;
+                width: 750;
+                position: bottom;
+                text-align: center;
+
+
+
+            }
+            #Back_Button{
+                background-color: transparent;
+                font-family: Honk;
+                display:flex;
+                position:relative;
+                left: 73%;
+                bottom:8%;
+                height: 30px;
+                width: 55px;
+                font-size: 20;
+                text-align: center;
+            }
+            
+            body{
+                background-image: url("https://t3.ftcdn.net/jpg/05/49/90/98/360_F_549909898_nMnY95Xi81njgpswVX44H3nsQ27EWlAO.jpg");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
         </style>
     </body>
 </html>
