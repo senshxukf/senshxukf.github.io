@@ -206,8 +206,11 @@
                     cauldronY = Math.max(50, Math.min(h - 50, enemyCircleY + Math.random() * 200 - 100)) // Random y position within the range of the enemy circle
                     cauldronDamage.play()
                 }
+                let enemyCircleColor1 = Math.floor(random(255))+1
+                let enemyCircleColor2 = Math.floor(random(255))+1
+                let enemyCircleColor3 = Math.floor(random(255))+1
 
-                fill("red");
+                fill(enemyCircleColor1,enemyCircleColor2,enemyCircleColor3)
                 circle(enemyCircleX, enemyCircleY, 50)
             }
 
