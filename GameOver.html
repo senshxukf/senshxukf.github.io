@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <script defer src="https://unpkg.com/p5.collide2d"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js" integrity="sha512-uaz5GpnQoE6t5echKlX8P52czvsIGgLPcvlzfvRubLZ1Hp8JemUDnbUiAahbVtPb+jUVrNETuXvAhDDF/N3M4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+       <script src = " https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
+        
+    </head>
+    <body>
+
+        <h1>GAME OVER</h1>
+        <button onclick = "ReturnToMenu()" id = "menu">Return to Menu </button>
+        <button onclick = "Restart()" id = "Starting_Button">Restart</button>
+        <style>
+            h1{
+                display: flex;
+                position: relative;
+                font-family: 'Honk';
+                font-size: 80;
+                margin: auto;
+                align-items:center;
+                justify-content: center;
+                flex-direction:column-reverse;
+                height: 500;
+                width: 750;
+                z-index: 0.5;
+                position: center;
+                top:-30%;
+            }
+            body{
+                background-color: black;
+                background-image: url("https://i.pinimg.com/originals/0d/26/58/0d265801624e29900ee562bbd50333e7.png");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            #Starting_Button{
+                flex-direction: column;
+                top:-45%;
+                position: relative;
+                display:flex;
+                flex-direction: column-reverse;
+                margin: auto;
+                justify-content: center;
+                align-items:center;
+                font-family:'Honk';
+                height: 65px;
+                width: 480px;
+                font-size: 50px; 
+                background-color: transparent;
+                box-shadow: 9px;
+            }
+
+            #menu{
+                flex-direction: column;
+                top:-20%;
+                position: relative;
+                display:flex;
+                flex-direction: column-reverse;
+                margin: auto;
+                justify-content: center;
+                align-items:center;
+                font-family:'Honk';
+                height: 65px;
+                width: 480px;
+                font-size: 50px; 
+                background-color: transparent;
+                box-shadow: 9px;
+
+            }
+
+        </style>
+        <script>
+            function Restart(){
+               location.href = 'Game.html';
+           }
+           
+            function ReturnToMenu(){
+                location.href = 'index.html';
+            }
+        </script>
+    </body>
+</html>
