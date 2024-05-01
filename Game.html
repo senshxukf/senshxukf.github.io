@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Includes the p5.collide2D addon library -->
+    <script defer src="https://unpkg.com/p5.collide2d"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js" integrity="sha512-uaz5GpnQoE6t5echKlX8P52czvsIGgLPcvlzfvRubLZ1Hp8JemUDnbUiAahbVtPb+jUVrNETuXvAhDDF/N3M4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <script src = " https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <h1>Health:</h1>
+    <h1 id="base_health"></h1>
+    <div id="timer"></div>   
+    <script>
+        let w = window.innerWidth
+        let h = window.innerHeight
+        let player
+        let detect = false
+        let hit = false
+        let baseHealth = 30
+        let base_damage = false
+        let speed = 10;
+        let enemy_circles = []
+        let maxEnemyCircles = 20 // Maximum number of enemy circles
+        let xOffset = 0
+        let cauldronX = w / 2 //x-coordinate of the cauldron
+        let cauldronY = h / 2 //y-coordinate of the cauldron
+        let timeLeft = 180; // 1 minute
+        function updateTimer() {
+            document.getElementById('timer').innerHTML = `Time Left: ${timeLeft} seconds`
+
+            timeLeft--
+
+            if (timeLeft >= 0) {
+                setTimeout(updateTimer, 1000)
+            } else {
+                location.href = 'YouWin.html'
+            }
+        }
+
+        updateTimer()
+
+        function preload() {
+            // Allows visual graphics to be seen on character
+            wizardRight = loadImage('2pixil-frame-0  wizard-Right(2).png')
+            wizardLeft = loadImage('3pixil-frame-0 wizard-Left(3).png')
+            wizardForward = loadImage('4pixil-frame-0 wizard-Forward (4).png')
+            wizardBack = loadImage('5pixil-frame-0 wizard-Back(5).png')
+            cauldronBase = loadImage('6pixil-frame-0 base-caludron (2).png')
+            cauldronDamage = loadSound('Metal Strike-[AudioTrimmer.com].mp3')
+        }
+
+        function setup() {
+            createCanvas(w, h)
+            player = new Jumper() // Defining jumper as new object
+        }
+
+        function createOpps() {
+            if (enemy_circles.length < maxEnemyCircles) {
+                // Create the constant size of the circles
+                let circle_radius = 50
+
+                // Find border sides
+                let borderSide = 3
+                let cx;
+                let cy;
+                if (borderSide == 0) {
+                    cy = 0;
+                    cx = Math.random() * (w - 2 * circle_radius) + circle_radius // Random x-coordinate
+                } else if (borderSide == 1) {
+                    cx = w;
+                    cy = Math.random() * (h - 2 * circle_radius) + circle_radius // Random y-coordinate
+                } else if (borderSide == 2) {
+                    cy = h;
+                    cx = Math.random() * (w - 2 * circle_radius) + circle_radius // Random x-coordinate
+                } else if (borderSide == 3) {
+                    cx = 0;
+                    cy = Math.random() * (h - 2 * circle_radius) + circle_radius // Random y-coordinate
+                }
+
+                // Create a random speed for the circles to reach the center
+                let speed = Math.random() * 2 + 10 // Random speed between 1 and 3
+
+                // Add circles being created to container using the .push method (enemy_circles)
+                // This will be used to constantly spawn in new circles after some of them are defeated
+                enemy_circles.push({ x: cx, y: cy, speed: speed })
+            }
+        }
+
+        // create new object
+        function Jumper() {
+            this.x = w / 2
+            this.y = 0;
+            this.lift = -12 // Create opposing force
+            this.velocity = 0 // Create velocity
+
+            this.show = function() {
+                fill("rgba(255,0,255,0.0)")
+                circle(w / 2, h / 2, 100)
+                ellipseMode(CENTER);
+                fill("rgba(0,0,0,0.5)")
+            }
+
+            this.hitbox = function() {
+                fill(0, 0, 255, 0)
+                circle(this.x, this.y, 75)
+                ellipseMode(CENTER)
+            }
+
+            this.cauldronBase = function() {
+                image(cauldronBase, cauldronX, cauldronY, 100, 100)
+                imageMode(CENTER)
+            }
+
+            this.forward = function() {
+                image(wizardForward, this.x, this.y, 130, 135)
+                imageMode(CENTER)
+            }
+
+            this.up = function() {
+                if (keyIsDown(87)) {
+                    let cx = this.x
+                    let cy = this.y
+                    this.y += this.lift
+                    image(wizardBack, cx, cy, 130, 135)
+                } else {
+                    fill("rgba(0,0,0,0)")
+                }
+            }
+
+            this.down = function() {
+                if (keyIsDown(83)) {
+                    let cx = this.x
+                    let cy = this.y
+                    this.y -= this.lift
+                }
+            }
+
+            this.left = function() {
+                if (keyIsDown(65)) {
+                    let cx = this.x
+                    let cy = this.y
+                    this.x -= 2.5;
+                    image(wizardLeft, cx, cy, 150, 150)
+                    imageMode(CENTER);
+                } else {
+                    fill("rgba(0,0,0,0)")
+                }
+            }
+
+            this.right = function() {
+                if (keyIsDown(68)) {
+                    let cx = this.x
+                    let cy = this.y
+                    this.x += 2.5;
+                    image(wizardRight, cx, cy, 150, 150)
+                    imageMode(CENTER)
+                    fill("rgba(0,0,0,0)")
+                }
+            }
+
+            this.update = function() {
+                this.y += this.velocity
+                this.x += this.velocity
+            }
+        }
+
+        function draw() {
+            clear()
+            player.hitbox()
+            player.show()
+            player.cauldronBase()
+            player.update()
+            player.forward()
+            player.up()
+            player.down()
+            player.left()
+            player.right()
+            createOpps()
+
+            for (let i = 0; i < enemy_circles.length; i++) {
+                let enemyCircleX = enemy_circles[i].x + xOffset
+                let enemyCircleY = enemy_circles[i].y
+                let enemyCircleRadius = 50
+
+                // Check collision with player
+                if (collideCircleCircle(player.x, player.y, 75, enemyCircleX, enemyCircleY, enemyCircleRadius)) {
+                    enemy_circles.splice(i, 1)
+                    speed++
+                    
+                }
+
+                // Check collision with cauldronBase
+                if (collideCircleCircle(cauldronX, cauldronY, 100, enemyCircleX, enemyCircleY, enemyCircleRadius)) {
+                    baseHealth--; // Reduce base health
+                    enemy_circles.splice(i, 1) // Remove the enemy circle
+                    speed++;
+                    document.getElementById('base_health').innerHTML = baseHealth
+                    cauldronDamage.play()
+
+                    // Update cauldron's position to a new random x and y coordinate
+                    cauldronX = Math.random() * w
+                    cauldronY = Math.max(50, Math.min(h - 50, enemyCircleY + Math.random() * 200 - 100)) // Random y position within the range of the enemy circle
+                    cauldronDamage.play()
+                }
+
+                fill("red");
+                circle(enemyCircleX, enemyCircleY, 50)
+            }
+
+            // Move all circles from left to right
+            xOffset += 5
+            if (xOffset > w) {
+                xOffset = 0
+                speed++
+            }
+
+            if (baseHealth === 0){
+                location.href = 'GameOver.html'
+            }
+        }
+    </script> 
+    <style>
+        body {
+            background-image: url("https://t3.ftcdn.net/jpg/06/04/22/36/360_F_604223671_RS327qPmIEjzubYMQz7oMVpGw7ROCo2S.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        h1 {
+            background-color: transparent black;
+            font-family: Honk;
+            font-size: 50;
+            height: 10px;
+            width: 10px;
+            
+        }
+        #timer {
+            position: absolute;
+             top: 20px;
+            left: 50%; 
+            transform: translateX(-50%);
+            font-family: 'Honk';
+            font-size: 24px;
+
+
+        }
+    </style>
+</body>
+</html>
