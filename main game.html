@@ -16,7 +16,7 @@
             let baseHealth = 100
             let base_damage = false
             let speed = 5
-            let enemy_circles = []
+            let enemy_circles = [[]]
 
 
             function preload(){ //Allows visual graphics to be seen on character
@@ -25,7 +25,7 @@
                 wizardForward = loadImage('4pixil-frame-0 wizard-Forward (4).png')
                 wizardBack = loadImage('5pixil-frame-0 wizard-Back(5).png')
                 cauldronBase = loadImage('6pixil-frame-0 base-caludron (2).png')
-
+                cauldronDamage = loadSound('Metal Strike-[AudioTrimmer.com].mp3')
             }
 
             function setup(){
@@ -34,6 +34,44 @@
                 window.ctx = canvas.getContext("2d")
 
             }
+             function createOpps(){
+                    //create the constant size of the circles
+                    let circle_radius = 50
+
+                    //find border sides
+                    let borderSide = Math.floor(random(0,4))
+                    let cx
+                    let cy
+                    console.log(borderSide)
+                    if (borderSide == 0){
+                         cy = 0
+                         cx = Math.random() * (w - 2 * circle_radius) + circle_radius // Random x-coordinate
+                    }
+
+                    if (borderSide == 1){
+                         cx = w
+                         cy = Math.random() * (h - 2 * circle_radius) + circle_radius // Random y-coordinate
+                    }
+
+                    if (borderSide == 2){
+                         cy = h
+                         cx = Math.random() * (w - 2 * circle_radius) + circle_radius // Random y-coordinate
+                    }
+
+                    if (borderSide == 3){
+                         cx = 0
+                         cy = Math.random() * (h - 2 * circle_radius) + circle_radius // Random y-coordinate
+                        
+                    }
+
+                    //create a random speed for the circles to reach the center
+                    let speed = Math.random() * 2 + 1; // Random speed between 1 and 3
+
+                    //add circles being created to container using the .push method (enemy_circles)
+                    //this will be used to constanly spawn in new circles after some of them are defeated
+                    enemy_circles.push([cx,cy,speed])
+                    }
+                
             //create new object
             function jumper() {
                 this.x = w/2
@@ -124,27 +162,14 @@
                     }
                 }
                     
-                    this.create_obsticle = function(){
-                    //create the constant size of the circles
-                    let circle_radius = 50
-
-                    //create enemy circle's random position on the game screen
-                    let cx = Math.random() * (canvas.width - 2 * circle_radius) + circle_radius // Random x-coordinate
-                    let cy = Math.random() * (canvas.height - 2 * circle_radius) + circle_radius // Random y-coordinate
-
-                    //create a random speed for the circles to reach the center
-                    let speed = Math.random() * 2 + 1; // Random speed between 1 and 3
-
-                    //add circles being created to container using the .push method (enemy_circles)
-                    //this will be used to constanly spawn in new circles after some of them are defeated
-                    enemy_circles.push({cx,cy,circle_radius,speed})
-                    }
-                
                 //function to loop on repeat within the draw function
                 this.update = function() {
                     //what direction am i traveling
                     this.y += this.velocity
                     this.x += this.velocity
+                    if (detect === true){
+                        cauldronDamage.play()
+                    }
                     if (hit === true ){
                         this.velocity *=2
                         this.lift = -7.5
@@ -182,7 +207,11 @@
                 player.down()
                 player.left()
                 player.right()
-                player.create_obsticle()
+                createOpps()
+                for(let i = 0; i < enemy_circles.length; i++){
+                    fill("red")
+                    circle(enemy_circles[i][0],enemy_circles[i][1],50)
+                }
                 enemy_circles.forEach(circle => {
                     //the ctx is short for context, in which ctx is the indicatior if I am working with the lifecycle methods
                     //lifecycle methods have three phases that include mounting, updating, and unmounting
@@ -199,15 +228,11 @@
                     //another thing I learned that the closePath() method does is that it creates a line that isn't visible on the canvas, but its there
 
                     })
-            }
+            
 
             //create the amount of time it takes to spawn the circles
-            setInterval(player.create_obsticle,2000)//counts in miliseconds with this method
-                    
             //start the enemy circle loop
-            while (true){
-                player.create_obsticle()
-            }
+                }
 
 
         </script>
@@ -229,4 +254,5 @@
     </body>
 </html>
             
+
 
