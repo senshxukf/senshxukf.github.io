@@ -1,0 +1,140 @@
+<html>
+    <head>
+        <script defer src="https://unpkg.com/p5.collide2d"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js" integrity="sha512-uaz5GpnQoE6t5echKlX8P52czvsIGgLPcvlzfvRubLZ1Hp8JemUDnbUiAahbVtPb+jUVrNETuXvAhDDF/N3M4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+       <script src = " https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
+        
+    </head>
+    <body>
+
+        <h1>YOU WIN!!!</h1>
+        <button onclick = "ReturnToMenu()" id = "menu">Return to Menu </button>
+        <button onclick = "Restart()" id = "Starting_Button">Replay</button>
+        <p>YOU PROTECTED THE CAULDRON TO THE LAST SECOND(press e)</p>
+        <style>
+            h1{
+                display: flex;
+                position: relative;
+                font-family: 'Honk';
+                font-size: 80;
+                margin: auto;
+                align-items:center;
+                justify-content: center;
+                flex-direction:column-reverse;
+                height: 500;
+                width: 750;
+                z-index: 0.5;
+                position: center;
+                top:-30%;
+            }
+            p{
+                display: flex;
+                text-align: center;
+                position: relative;
+                font-family: 'Honk';
+                font-size: 80;
+                margin: auto;
+                align-items:center;
+                justify-content: center;
+                flex-direction:column-reverse;
+                height: 500;
+                width: 1300;
+                z-index: 0.5;
+                position: center;
+                top:-44%;  
+            }
+            body{
+                background-color: black;
+                background-image: url("https://i.pinimg.com/originals/ab/71/05/ab7105adc1eaa1f1b7e3b27277272e42.gif");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            #Starting_Button{
+                flex-direction: column;
+                top:-48%;
+                position: relative;
+                display:flex;
+                flex-direction: column-reverse;
+                margin: auto;
+                justify-content: center;
+                align-items:center;
+                font-family:'Honk';
+                height: 65px;
+                width: 480px;
+                font-size: 50px; 
+                background-color: transparent;
+                box-shadow: 9px;
+            }
+
+            #menu{
+                flex-direction: column;
+                top:-23%;
+                position: relative;
+                display:flex;
+                flex-direction: column-reverse;
+                margin: auto;
+                justify-content: center;
+                align-items:center;
+                font-family:'Honk';
+                height: 65px;
+                width: 480px;
+                font-size: 50px; 
+                background-color: transparent;
+                box-shadow: 9px;
+
+            }
+
+        </style>
+        <script>
+             let music = false
+            let w = 200
+           let h = 200
+           //preload assets
+           //create variable for sound
+           let backgroundMusic
+
+           function preload(){
+               //assign sound
+               backgroundMusic = loadSound('Bonfire - An Jone.mp3')
+               startButton = loadSound('Body Punch Series-[AudioTrimmer.com].mp3')
+           }
+           
+           function setup(){
+               createCanvas(w,h)
+           }
+           function draw() {
+
+               //set initial volume. variable.setVolume(0.0 to 1.0)
+               backgroundMusic.setVolume(0.3)
+               startButton.setVolume(0.3)
+           }
+            //play a sound when spacebar is pressed
+           function keyPressed (){
+               if (keyCode === 69 && !music){
+                   //vatiable name.play
+                   music = true 
+                   backgroundMusic.play()
+               
+               }
+
+               else if (keyCode === 69 && music){
+                clear()
+                music = false
+                backgroundMusic.stop()
+               }             
+               
+           }
+            function Restart(){
+               location.href = 'Game.html';
+           }
+           
+            function ReturnToMenu(){
+                location.href = 'index.html';
+            }
+        </script>
+    </body>
+</html>
